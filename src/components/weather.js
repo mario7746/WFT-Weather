@@ -18,8 +18,8 @@ class Weather extends Component {
     })
   }
 
-  fetchWeather = (city) => {
-    getWeather(city).then(data => {
+  fetchWeather = (city, lat, lng) => {
+    getWeather(lat, lng).then(data => {
       this.setState({
         city: city,
         temp: Math.ceil(data.main.temp),
@@ -69,9 +69,10 @@ class Weather extends Component {
             <Autocomplete
               style={{width: '100%',  textAlign: 'center', border: '1px solid #888'}}
               onPlaceSelected={(place) => {
-                this.fetchWeather(place.name)
+                const lat = place.geometry.location.lat()
+                const lng = place.geometry.location.lng()
+                this.fetchWeather(place.name, lat, lng)
               }}
-              types={['(regions)']}
               componentRestrictions={{country: "us"}}
               onChange={this.onCityChange}
               value={city}
