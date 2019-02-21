@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import getWeather from '../api'
 import Autocomplete from 'react-google-autocomplete'
 
+import { getCondition } from '../helpers/conditions'
+
 
 class Weather extends Component {
   state={
@@ -27,27 +29,6 @@ class Weather extends Component {
         newInput: true
       })
     })
-  }
-
-
-  getCondition = id => {
-    if(id >= 200 && id <=299) {
-      return "you got some fuckin' thunderstorms!"
-    } else if(id >= 300 && id <=399) {
-      return "drizzly as fuck out there!"
-    } else if(id >= 500 && id <=599) {
-      return "raining cats and fuckin' dogs!"
-    } else if(id >= 600 && id <=699) {
-      return "it's fuckin' snowing!"
-    } else if(id >= 700 && id <=799) {
-      return "you got some weird fucking hazy weather!"
-    } else if(id === 800) {
-      return "it's clear as fuck!"
-    } else if(id >= 801 && id <=899) {
-      return "theres fuckin' clouds and shit!"
-    } else {
-      return "it's fuckin' weather outside!"
-    }
   }
 
   reset = () => {
@@ -86,7 +67,7 @@ class Weather extends Component {
           <div className="weather-container">
             <div className="weather-text" style={{marginTop: '50px'}}>
               <h1>{city}</h1>
-              <h3>It's fuckin' {temp}°F and {this.getCondition(conId)}</h3>
+              <h3>It's fuckin' {temp}°F and {getCondition(conId)}</h3>
             </div>
 
             <button onClick={this.reset}>Reset</button>
