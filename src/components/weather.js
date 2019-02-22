@@ -13,6 +13,16 @@ class Weather extends Component {
     newInput: false
   }
 
+  componentDidMount() {
+    if(window.navigator.geolocation){
+      window.navigator.geolocation.getCurrentPosition((data) => {
+        const lat = data.coords.latitude
+        const lon = data.coords.longitude
+        this.fetchWeather(lat, lon)
+      })
+    }
+  }
+
   onCityChange = e => {
     this.setState({
       city: e.target.value,
@@ -20,10 +30,11 @@ class Weather extends Component {
     })
   }
 
-  fetchWeather = (city, lat, lng) => {
-    getWeather(lat, lng).then(data => {
+  fetchWeather = (lat, lon) => {
+    getWeather(lat, lon).then(data => {
+      console.log(data)
       this.setState({
-        city: city,
+        city: data.name,
         temp: Math.ceil(data.main.temp),
         conId: data.weather[0].id,
         newInput: true
@@ -52,7 +63,7 @@ class Weather extends Component {
               onPlaceSelected={(place) => {
                 const lat = place.geometry.location.lat()
                 const lng = place.geometry.location.lng()
-                this.fetchWeather(place.name, lat, lng)
+                this.fetchWeather(lat, lng)
               }}
               componentRestrictions={{country: "us"}}
               onChange={this.onCityChange}
@@ -70,7 +81,7 @@ class Weather extends Component {
               <h3>It's fuckin' {temp}°F and {getCondition(conId)}</h3>
             </div>
 
-            <button onClick={this.reset}>Reset</button>
+            <button onClick={this.reset}>Check Another Fuckin' City</button>
           </div>
 
         }
