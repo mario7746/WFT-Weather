@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import getWeather from '../api'
 import Autocomplete from 'react-google-autocomplete'
+import fingerLoader from '../images/fingerLoader.gif'
 
 import { getCondition } from '../helpers/conditions'
 
@@ -10,10 +11,12 @@ class Weather extends Component {
     city: '',
     temp: '',
     conId: '',
-    newInput: false
+    newInput: false,
+    loading: false,
   }
 
   componentDidMount() {
+    this.setState({loading: true})
     if(window.navigator.geolocation){
       window.navigator.geolocation.getCurrentPosition((data) => {
         const lat = data.coords.latitude
@@ -31,15 +34,17 @@ class Weather extends Component {
   }
 
   fetchWeather = (lat, lon) => {
-    getWeather(lat, lon).then(data => {
-      console.log(data)
-      this.setState({
-        city: data.name,
-        temp: Math.ceil(data.main.temp),
-        conId: data.weather[0].id,
-        newInput: true
+    this.setState({loading: true})
+    getWeather(lat, lon)
+      .then(data => {
+        this.setState({
+          city: data.name,
+          temp: Math.ceil(data.main.temp),
+          conId: data.weather[0].id,
+          newInput: true,
+          loading: false
+        })
       })
-    })
   }
 
   reset = () => {
@@ -52,11 +57,20 @@ class Weather extends Component {
   }
 
   render() {
-    const { temp, city, conId, newInput } = this.state
+    const { temp, city, conId, newInput, loading } = this.state
 
     return (
       <div className="container" style={{maxWidth: '300px', width: '100%'}}>
-        { !newInput &&
+        { loading &&
+
+          <div>
+            <img src={fingerLoader} alt="middle finger gif"/>
+            <h1>Loading Your Fuckin' Weather...</h1>
+          </div>
+
+        }
+
+        { (!newInput && !loading) &&
           <div className="input-container">
             <Autocomplete
               style={{width: '100%',  textAlign: 'center', border: '1px solid #888'}}
@@ -74,7 +88,7 @@ class Weather extends Component {
           </div>
         }
 
-        { newInput &&
+        { ( newInput && !loading ) &&
           <div className="weather-container">
             <div className="weather-text" style={{marginTop: '50px'}}>
               <h1>{city}</h1>
