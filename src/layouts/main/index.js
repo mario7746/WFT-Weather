@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>What's the Fuckin' Weather?</h1>
-        <Weather/>
+          <Weather/>
       </div>
     );
   }

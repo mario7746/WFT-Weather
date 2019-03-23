@@ -7,7 +7,7 @@ import { getCondition } from '../helpers/conditions'
 
 
 class Weather extends Component {
-  state={
+  state = {
     city: '',
     temp: '',
     conId: '',
@@ -37,13 +37,15 @@ class Weather extends Component {
     this.setState({loading: true})
     getWeather(lat, lon)
       .then(data => {
-        this.setState({
-          city: data.name,
-          temp: Math.ceil(data.main.temp),
-          conId: data.weather[0].id,
-          newInput: true,
-          loading: false
-        })
+        setTimeout(() => {
+          this.setState({
+            city: data.name,
+            temp: Math.ceil(data.main.temp),
+            conId: data.weather[0].id,
+            newInput: true,
+            loading: false
+          })
+        }, 3000)
       })
   }
 
