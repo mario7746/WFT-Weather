@@ -47,6 +47,10 @@ class Weather extends Component {
           })
         }, 3000)
       })
+      .catch(err => {
+        this.setState({loading: false})
+        console.error(err)
+      })
   }
 
   reset = () => {
